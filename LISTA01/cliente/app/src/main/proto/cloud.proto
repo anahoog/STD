@@ -1,0 +1,46 @@
+syntax = "proto3";
+package cloud;
+
+import "google/protobuf/timestamp.proto";
+
+// Para indicar que a compilação deverá gerar múltiplos arquivos .java
+option java_multiple_files = true;
+
+// Para indicar o nome do pacote das classes Java que serão geradas
+option java_package = "engtelecom.std.cloud";
+
+// Para indicar o nome da classe Java que será gerada na compilação
+option java_outer_classname = "CloudProtos";
+
+// Definição das estruturas de dados para representar um local
+message Local {
+    int32 id = 1;
+    string comodo = 2;
+
+    enum TipoDispositivo {
+        arCondicionado = 0;
+        lampada = 1;
+    }
+
+    // Todo dispositivo deve ter um número e um rótulo 
+    message nomeDispositivo {
+        string dispositivo = 1;
+        TipoDispositivo tipo = 2;
+    }
+
+    // para indicar que um local poderá ter vários dispositivos
+    repeated nomeDispositivo dispositivos = 3;
+
+    // para registrar quando o contato foi criado
+    google.protobuf.Timestamp last_updated = 4;
+    }
+
+message Resposta{
+    string resultado = 1;
+}
+
+    // Definição da interface do serviço (métodos que poderão ser invocados)
+service Cloud {
+    rpc adicionar (Local) returns (Resposta) {}
+    rpc buscar(Local) returns (Local){}
+}
